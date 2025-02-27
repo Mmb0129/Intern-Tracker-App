@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Error</title>
+    
+    <style>
+                /* Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8d7da;
+            margin: 0;
+        }
+
+        .error-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            border-left: 6px solid #dc3545;
+        }
+
+        h2 {
+            color: #dc3545;
+        }
+
+        p {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            background-color: #a71d2a;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="error-box">
+        <h2>🚫 <%= title %></h2>
+        <p><%= message %></p>
+        <a href="/" class="back-btn">🔙 Go Back</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Internship Details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 20px 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      
+      h2 {
+        text-align: center;
+        color: #333;
+      }
+      
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      label {
+        margin-top: 15px;
+        margin-bottom: 5px;
+        color: #555;
+      }
+      
+      input[type="text"],
+      input[type="date"],
+      select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      
+      input[type="text"]:focus,
+      input[type="date"]:focus,
+      select:focus {
+        outline: none;
+        border-color: #66afe9;
+      }
+      
+      button {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #28a745;
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      button:hover {
+        background-color: #218838;
+      }
+      
+      .btn {
+        display: inline-block;
+        margin-top: 20px;
+        text-decoration: none;
+        color: #007bff;
+      }
+      
+      .btn:hover {
+        text-decoration: underline;
+      }
+      .readonly-field {
+            background-color: #f0f0f0; /* Light gray */
+            color: #666; /* Darker text */
+            border: 1px solid #ccc;
+            filter: blur(0.5px); /* Soft blur */
+            pointer-events: none; /* Prevent interaction */
+        }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Edit Your Internship Details</h2>
+      
+      <!-- Form for updating internship details -->
+      <form action="/update-details" method="POST">
+        <!-- Hidden fields -->
+        <input type="hidden" name="serialNo" value="<%= studentData[0] %>" />
+        <input type="hidden" name="registerNumber" value="<%= studentData[1] %>" />
+
+        <!-- Name field -->
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="<%= studentData[2] %>" required readonly class="readonly-field" />
+
+        <!-- Mobile Number field -->
+        <label for="mobileNo">Mobile No.:</label>
+        <input type="text" id="mobileNo" name="mobileNo" value="<%= studentData[3] %>" required />
+
+        <!-- Section field -->
+        <label for="section">Section:</label>
+        <input type="text" readonly class="readonly-field" id="section" name="section" value="<%= studentData[4] %>" required />
+
+        <!-- Internship Title field -->
+        <label for="title">Internship Title:</label>
+        <input type="text" id="title" name="title" value="<%= studentData[6] %>" required />
+
+        <!-- Company Name field -->
+        <label for="companyName">Company Name:</label>
+        <input type="text" readonly class="readonly-field" id="companyName" name="companyName" value="<%= studentData[10] %>" required />
+
+        <!-- Duration field -->
+        <label for="period">Duration (Months):</label>
+        <input type="text" id="period" name="period" value="<%= studentData[7] %>" required />
+
+        <!-- Start Date field -->
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" value="<%= studentData[8] %>" required />
+
+        <!-- End Date field -->
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" value="<%= studentData[9] %>" required />
+
+        <!-- Placement Source field -->
+        <label for="placementSource">Placement Source:</label>
+        <input type="text" id="placementSource" name="placementSource" value="<%= studentData[11] %>" required />
+
+        <!-- Stipend field -->
+        <label for="stipend">Stipend (Rs):</label>
+        <input type="text" id="stipend" name="stipend" value="<%= studentData[12] %>" required />
+
+        <!-- Internship Type field -->
+        <label for="internshipType">Internship Type:</label>
+        <input type="text" id="internshipType" name="internshipType" value="<%= studentData[13] %>" required />
+
+        <!-- Location field -->
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" value="<%= studentData[14] %>" required />
+
+        <!-- Permission Letter field -->
+        <label for="permissionLetter">Permission Letter Submitted:</label>
+        <select id="permissionLetter" name="permissionLetter">
+          <option value="Yes" <%= studentData[15] === "Yes" ? "selected" : "" %>>Yes</option>
+          <option value="No" <%= studentData[15] === "No" ? "selected" : "" %>>No</option>
+        </select>
+
+        <!-- Completion Certificate field -->
+        <label for="completionCertificate">Completion Certificate Submitted:</label>
+        <select id="completionCertificate" name="completionCertificate">
+          <option value="Yes" <%= studentData[16] === "Yes" ? "selected" : "" %>>Yes</option>
+          <option value="No" <%= studentData[16] === "No" ? "selected" : "" %>>No</option>
+        </select>
+
+        <!-- Internship Report field -->
+        <label for="internshipReport">Internship Report Submitted:</label>
+        <select id="internshipReport" name="internshipReport">
+          <option value="Yes" <%= studentData[17] === "Yes" ? "selected" : "" %>>Yes</option>
+          <option value="No" <%= studentData[17] === "No" ? "selected" : "" %>>No</option>
+        </select>
+
+        <!-- Student Feedback field -->
+        <label for="studentFeedback">Student Feedback Submitted:</label>
+        <select id="studentFeedback" name="studentFeedback">
+          <option value="Yes" <%= studentData[18] === "Yes" ? "selected" : "" %>>Yes</option>
+          <option value="No" <%= studentData[18] === "No" ? "selected" : "" %>>No</option>
+        </select>
+
+        <!-- Employer Feedback field -->
+        <label for="employerFeedback">Employer Feedback Submitted:</label>
+        <select id="employerFeedback" name="employerFeedback">
+          <option value="Yes" <%= studentData[19] === "Yes" ? "selected" : "" %>>Yes</option>
+          <option value="No" <%= studentData[19] === "No" ? "selected" : "" %>>No</option>
+        </select>
+
+        <!-- Submit button -->
+        <button type="submit">Update Details</button>
+      </form>
+
+      <!-- Navigation link back to the dashboard -->
+      <a href="/welcome" class="btn">🔙 Back to Dashboard</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coordinator Dashboard</title>
+    <link rel="stylesheet" href="/dashstyle.css">
+</head>
+<body>
+    
+    <div class="container">
+        <div class="header-container">
+            <header>Internship Records</header>
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+        
+        
+        <!-- Search & Filter Section -->
+        <div class="filter-container">
+            <input type="text" id="search" placeholder="Search by Name, Company..." onkeyup="applyFilters()">
+            
+            <select id="filterCompany" onchange="applyFilters()">
+                <option value="">Company</option>
+                <option value="Google">Google</option>
+                <option value="Amazon">Amazon</option>
+            </select>
+
+            <select id="filterSection" onchange="applyFilters()">
+                <option value="">Section</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+            </select>
+
+            <select id="filterInternshipType" onchange="applyFilters()">
+                <option value="">Internship Type</option>
+                <option value="Research">Research</option>
+                <option value="Industry">Industry</option>
+            </select>
+
+            <select id="filterStipend" onchange="applyFilters()">
+                <option value="">Stipend</option>
+                <option value="Paid">Paid</option>
+                <option value="Unpaid">Unpaid</option>
+            </select>
+
+            <select id="filterLocation" onchange="applyFilters()">
+                <option value="">Location</option>
+                <option value="India">India</option>
+                <option value="Abroad">Abroad</option>
+            </select>
+
+            <select id="filterPlacement" onchange="applyFilters()">
+                <option value="">Placement Source</option>
+                <option value="Through College">Through College</option>
+                <option value="Through Outside">Through Outside</option>
+            </select>
+
+            <button onclick="resetFilters()">Reset Filters</button>
+        </div>
+
+        <!-- Data Display -->
+        <div id="grid-container">
+            <% data.slice(1).forEach((row, index) => { %>
+                <div class="grid-item" 
+                    data-name="<%= row[2] %>" 
+                    data-company="<%= row[10] %>" 
+                    data-section="<%= row[4] %>" 
+                    data-internship="<%= row[13] %>" 
+                    data-stipend="<%= row[12] > 0 ? 'Paid' : 'Unpaid' %>"
+                    data-location="<%= row[14] %>"
+                    data-placement="<%= row[11] %>">
+                    
+                    <h3><%= row[2] %></h3>
+                    <p><strong>Reg No:</strong> <%= row[1] %></p>
+                    <p><strong>Mobile:</strong> <%= row[3] %></p>
+                    <p><strong>Section:</strong> <%= row[4] %></p>
+                    <p><strong>Company:</strong> <%= row[10] %></p>
+                    <p><strong>Internship Type:</strong> <%= row[13] %></p>
+                    <p><strong>Stipend:</strong> ₹<%= row[12] %></p>
+                    <p><strong>Location:</strong> <%= row[14] %></p>
+                    <p><strong>Placement Source:</strong> <%= row[11] %></p>
+                    <p><strong>Permission Letter:</strong> <%= row[15]=='Yes' ? '✅ Yes' : '❌ No' %></p>
+                    <p><strong>Completion Cert.:</strong> <%= row[16]=='Yes' ? '✅ Yes' : '❌ No' %></p>
+                    <p><strong>Internship Report:</strong> <%= row[17]=='Yes' ? '✅ Yes' : '❌ No' %></p>
+                    <p><strong>Student Feedback:</strong> <%= row[18]=='Yes' ? '✅ Yes' : '❌ No' %></p>
+                    <p><strong>Employer Feedback:</strong> <%= row[19]=='Yes' ? '✅ Yes' : '❌ No' %></p>
+                </div>
+            <% }); %>
+        </div>
+
+        
+    </div>
+
+    <script src="/dashboard.js"></script>
+</body>
+</html>

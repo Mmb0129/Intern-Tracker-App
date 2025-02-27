@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Details</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            text-align: center;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .card p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Your Submitted Internship Details</h2>
+
+        <% if (studentData) { %>
+            <div class="card">
+                <h2><%= studentData[2] %> - <%= studentData[1] %></h2>
+                <!-- <p><span class="label">Email:</span> <%= studentData[3] %></p> -->
+                <p><span class="label">Mobile No.:</span> <%= studentData[3] %></p>
+                <p><span class="label">Section:</span> <%= studentData[4] %></p>
+                <p><span class="label">Internship Title:</span> <%= studentData[6] %></p>
+                <p><span class="label">Company Name:</span> <%= studentData[10] %></p>
+                <p><span class="label">Duration:</span> <%= studentData[7] %> (From <%= studentData[8] %> to <%= studentData[9] %>)</p>
+                <p><span class="label">Placement Source:</span> <%= studentData[11] %></p>
+                <p><span class="label">Stipend:</span> ₹<%= studentData[12] %></p>
+                <p><span class="label">Internship Type:</span> <%= studentData[13] %></p>
+                <p><span class="label">Location:</span> <%= studentData[14] %></p>
+                <p><span class="label">Permission Letter Submitted:</span> <%= studentData[15] %></p>
+                <p><span class="label">Completion Certificate Submitted:</span> <%= studentData[16] %></p>
+                <p><span class="label">Internship Report Submitted:</span> <%= studentData[17] %></p>
+                <p><span class="label">Student Feedback Submitted:</span> <%= studentData[18] %></p>
+                <p><span class="label">Employer Feedback Submitted:</span> <%= studentData[19] %></p>
+            </div>
+        <% } else { %>
+            <p>No internship details found.</p>
+        <% } %>
+
+        <a href="/welcome" class="btn">🔙 Back to Dashboard</a>
+    </div>
+
+</body>
+</html>

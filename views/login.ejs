@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSN - CSE Intern Tracker</title>
+    <link rel="stylesheet" href="/loginstyle.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <header>
+            <h1><span>Intern - Tracker</span></h1>
+        </header>
+
+        <div class="toggle-container">
+            <button id="student-btn" class="toggle-btn active" onclick="switchRole('student')">Student</button>
+            <button id="coordinator-btn" class="toggle-btn" onclick="switchRole('coordinator')">Coordinator</button>
+        </div>
+
+        <h2>Login</h2>
+        <form action="/login" method="POST" id="login-form">
+            <input type="hidden" name="role" id="role" value="student"> 
+        
+            <!-- Student Login Fields -->
+            <div id="student-login">
+                <div class="input-box">
+                    <input type="text" name="registerNumber" placeholder="Register Number" maxlength="13">
+                </div>
+                <div class="input-box">
+                    <input type="password" name="studentPassword" placeholder="Password">
+                </div>
+            </div>
+        
+            <!-- Coordinator Login Fields -->
+            <div id="coordinator-login" style="display: none;">
+                <div class="input-box">
+                    <input type="email" name="email" placeholder="Email Address">
+                </div>
+                <div class="input-box">
+                    <input type="password" name="coordinatorPassword" placeholder="Password">
+                </div>
+            </div>
+        
+            <button type="submit" class="btn">Login</button>
+        </form>
+        
+    </div>
+
+    <script src="/login.js"></script>
+</body>
+</html>
