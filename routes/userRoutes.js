@@ -8,7 +8,7 @@ require("dotenv").config(); // To load environment variables
 const COORDINATORS = require("../data/coordinators")
 const nodemailer = require("nodemailer");
 const Doubt = require("../models/Doubt");
-
+const path = require("path");
 
 const {
     createSubfolder,
@@ -161,7 +161,8 @@ router.post("/login", async (req, res) => {
             }); 
         } 
     } else if (role === "student") { 
-        const students = JSON.parse(fs.readFileSync("./data/students.json")); 
+        const students = JSON.parse(fs.readFileSync(path.join(__dirname, "../data/students.json")));
+
 
         if (students[registerNumber] && students[registerNumber] === studentPassword) { 
             req.session.user = registerNumber; 

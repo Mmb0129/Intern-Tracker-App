@@ -11,6 +11,9 @@
             "src": "/(.*)",
             "dest": "/index.js"
         }
-    ]
+    ],
+    "includeFiles": [
+    "data/students.json"
+  ]
 
 }
