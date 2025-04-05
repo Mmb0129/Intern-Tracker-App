@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Doubts - Coordinator View</title>
+  <link rel="stylesheet" href="/coordinator-doubts.css" />
+</head>
+<body>
+  <div class="coordinator-container">
+    <h2>Student Doubts</h2>
+    <div >
+        <a href="/dashboard" class="back-btn">← Back to Dashboard</a>
+    </div>
+    <div class="table-wrapper">
+      <table class="modern-table">
+        <thead>
+          <tr>
+            <th>Reg No</th>
+            <th>Doubt</th>
+            <th>Answer</th>
+            <th>Reply</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% doubts.forEach(d => { %>
+            <tr>
+              <td><%= d.regNo %></td>
+              <td><%= d.question %></td>
+              <td><%= d.answer || "Not answered yet" %></td>
+              <td>
+                <% if (!d.answer) { %>
+                  <form action="/answer-doubt/<%= d._id %>" method="POST" class="reply-form">
+                    <input type="text" name="answer" required placeholder="Type reply..." class="reply-input" />
+                    <button type="submit" class="submit-reply-btn">Submit</button>
+                  </form>
+                <% } else { %>
+                  ✅ Answered
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    
+  </div>
+
+  
+</body>
+</html>

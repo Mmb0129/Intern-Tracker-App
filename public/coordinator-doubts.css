@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #2c6dfd, #6b9aff);
+  margin: 0;
+  padding: 40px;
+  color: #fff;
+}
+
+.coordinator-container {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 1000px;
+  margin: auto;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.modern-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.modern-table th, .modern-table td {
+  padding: 14px 16px;
+  text-align: left;
+  color: #fff;
+}
+
+.modern-table thead {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.modern-table tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modern-table tr:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.reply-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reply-input {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  outline: none;
+}
+
+.submit-reply-btn {
+  background: linear-gradient(135deg, #2c6dfd, #5a8cff);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.submit-reply-btn:hover {
+  background: linear-gradient(135deg, #1e52d4, #4c7bff);
+  transform: scale(1.05);
+}
+
+.back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #ff4b2b, #ff416c);
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(255, 65, 108, 0.3);
+  }
+  
+.back-btn:hover {
+    background: linear-gradient(135deg, #e0332b, #e03e61);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(255, 65, 108, 0.4);
+  }
+  
+
+  .btn-wrapper {
+    text-align: right;
+    margin-bottom: 20px;
+  }
+  
+  .back-btn {
+    display: inline-block;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #ff4b2b, #ff416c);
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(255, 65, 108, 0.3);
+  }
+  
+.back-btn:hover {
+    background: linear-gradient(135deg, #e0332b, #e03e61);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(255, 65, 108, 0.4);
+}
+  

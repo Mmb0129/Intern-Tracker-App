@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #2c6dfd, #6b9aff);
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 35px;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+h1 {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  resize: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 10px 20px;
+  background: #00c853;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #00b34a;
+}
+
+.doubt-item {
+  text-align: left;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+  color: #fff;
+}
+
+.doubt-item strong {
+  display: inline-block;
+  width: 80px;
+}
+
+.doubt-item em {
+  color: #ffd700;
+}
+
+a.back-link {
+  display: inline-block;
+  margin-top: 25px;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+  border: 1px solid white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+a.back-link:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 500px) {
+  .container {
+    padding: 25px;
+  }
+
+  textarea {
+    font-size: 14px;
+  }
+}

@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    populateFilterOptions();
+    applyFilters();
 });
 
 function applyFilters() {
@@ -11,14 +11,14 @@ function applyFilters() {
     let locationFilter = document.getElementById("filterLocation").value.toLowerCase();
     let placementFilter = document.getElementById("filterPlacement").value.toLowerCase();
 
-    document.querySelectorAll(".grid-item").forEach(item => {
-        let name = item.dataset.name.toLowerCase();
-        let company = item.dataset.company.toLowerCase();
-        let section = item.dataset.section.toLowerCase();
-        let internship = item.dataset.internship.toLowerCase();
-        let stipend = item.dataset.stipend.toLowerCase();
-        let location = item.dataset.location.toLowerCase();
-        let placement = item.dataset.placement.toLowerCase();
+    document.querySelectorAll("tbody tr").forEach(row => {
+        let name = row.dataset.name.toLowerCase();
+        let company = row.dataset.company.toLowerCase();
+        let section = row.dataset.section.toLowerCase();
+        let internship = row.dataset.internship.toLowerCase();
+        let stipend = row.dataset.stipend.toLowerCase();
+        let location = row.dataset.location.toLowerCase();
+        let placement = row.dataset.placement.toLowerCase();
 
         let matches = (!searchValue || name.includes(searchValue) || company.includes(searchValue)) &&
                       (!companyFilter || company.includes(companyFilter)) &&
@@ -28,7 +28,7 @@ function applyFilters() {
                       (!locationFilter || location.includes(locationFilter)) &&
                       (!placementFilter || placement.includes(placementFilter));
 
-        item.style.display = matches ? "block" : "none";
+        row.style.display = matches ? "" : "none";
     });
 }
 

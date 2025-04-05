@@ -4,75 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Internship Details Form</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/fill-form.css">
+    <link rel="icon" type="image/png" href="/ssn-logo.png">
+
 </head>
 <body>
     <div class="container">
         <header>Student Internship Details Form</header>
-        <form action="/" method="POST">
+        <form action="/upload" method="POST" enctype="multipart/form-data">
             <div class="fields">
-                <div class="input-field">
+                <div class="input-group">
                     <label>Register Number</label>
                     <input type="text" name="registerNumber" placeholder="Enter Register Number" required>
                 </div>
-                <div class="input-field">
+                <div class="input-group">
                     <label>Name</label>
                     <input type="text" name="name" placeholder="Enter your name" required>
                 </div>
-                <div class="input-field">
+                <div class="input-group">
                     <label>Mobile No.</label>
                     <input type="text" name="mobileNo" placeholder="Enter mobile number" required>
                 </div>
-                <div class="input-field">
+                <div class="input-group">
                     <label>Section</label>
                     <input type="text" name="section" placeholder="Enter section" required>
                 </div>
-                <div class="input-field">
+                <div class="input-group">
                     <label>Obtained Internship</label>
                     <select name="obtainedInternship" required>
                         <option value="Yes">Yes</option>
                         <option value="No">No</option>
                     </select>
                 </div>
-                <div class="input-field">
+                <div class="input-group">
                     <label>Title</label>
                     <input type="text" name="title" placeholder="Enter title" required>
                 </div>
-                <div class="input-field">
+                <div class="input-group">
                     <label>Period</label>
                     <input type="text" name="period" placeholder="e.g., 2 months" required>
                 </div>
-                <div class="input-field">
+                <div class="input-group">
                     <label>Start Date</label>
                     <input type="date" name="startDate" required>
                 </div>
-                <div class="input-field">
+                <div class="input-group">
                     <label>End Date</label>
                     <input type="date" name="endDate" required>
                 </div>
-                <div class="input-field">
+                <div class="input-group">
                     <label>Company Name</label>
                     <input type="text" name="companyName" placeholder="Enter company name" required>
                 </div>
-                <div class="input-field">
+                <div class="input-group">
                     <label>Placement Source</label>
                     <select name="placementSource" required>
                         <option value="Through College">Through College</option>
                         <option value="Self-arranged">Self-arranged</option>
                     </select>
                 </div>
-                <div class="input-field">
+                <div class="input-group">
                     <label>Stipend (In Rs.)</label>
                     <input type="text" name="stipend" placeholder="Enter stipend amount">
                 </div>
-                <div class="input-field">
+                <div class="input-group">
                     <label>Internship Type</label>
                     <select name="internshipType" required>
                         <option value="Research">Research</option>
                         <option value="Industry">Industry</option>
                     </select>
                 </div>
-                <div class="input-field">
+                <div class="input-group">
                     <label>Abroad / India</label>
                     <select name="location" required>
                         <option value="India">India</option>
@@ -82,13 +84,26 @@
             </div>
 
             <div class="document-section">
-                <label>Document Submission</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="permissionLetter" value="Yes"> Signed Permission Letter, Offer Letter Submitted</label><br>
-                    <label><input type="checkbox" name="completionCertificate" value="Yes"> Completion Certificate Submitted</label><br>
-                    <label><input type="checkbox" name="internshipReport" value="Yes"> Internship Report Submitted</label><br>
-                    <label><input type="checkbox" name="studentFeedback" value="Yes"> Student Feedback Submitted</label><br>
-                    <label><input type="checkbox" name="employerFeedback" value="Yes"> Employer Feedback Submitted</label><br>
+                <label>Upload Documents</label>
+                <div class="input-group">
+                    <label>Signed Permission Letter, Offer Letter</label>
+                    <input type="file" name="permissionLetter">
+                </div>
+                <div class="input-group">
+                    <label>Completion Certificate</label>
+                    <input type="file" name="completionCertificate">
+                </div>
+                <div class="input-group">
+                    <label>Internship Report</label>
+                    <input type="file" name="internshipReport">
+                </div>
+                <div class="input-group">
+                    <label>Student Feedback</label>
+                    <input type="file" name="studentFeedback">
+                </div>
+                <div class="input-group">
+                    <label>Employer Feedback</label>
+                    <input type="file" name="employerFeedback">
                 </div>
             </div>
 

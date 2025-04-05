@@ -4,9 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome - SSN CSE Intern Tracker</title>
+    <link rel="icon" type="image/png" href="/ssn-logo.png">
     <link rel="stylesheet" href="/welcomestyle.css">
+   
 </head>
 <body>
+    <% if (msg) { %>
+        <div class="toast"><%= msg %></div>
+    <% } %>
+    <% if (error) { %>
+        <div class="toast error"><%= error %></div>
+    <% } %>
+
     <div class="container">
         <div class="profile-section">
             <img src="/profile.png" alt="Profile Picture">
@@ -17,7 +26,18 @@
             <a href="/student" class="btn">📌 Fill Internship Form</a>
             <a href="/view-details" class="btn">📄 View Submitted Details</a>
             <a href="/update-details" class="btn">✏️ Edit Submitted Details</a>
+            <a href="/student/my-doubts" class="btn">🤷‍♀️ Ask Doubts</a>
+            <a href="/logout" class="btn logout-btn">🚪 Logout</a>
         </div>
+
+        
     </div>
+
+    <script>
+        setTimeout(() => {
+            const toast = document.querySelector('.toast');
+            if (toast) toast.style.display = 'none';
+        }, 3000);
+    </script>
 </body>
 </html>

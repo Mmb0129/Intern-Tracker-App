@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Your Doubts</title>
+  <link rel="icon" type="image/png" href="/ssn-logo.png">
+  <link rel="stylesheet" href="/student-doubts.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Your Doubts</h1>
+
+    <form action="/student/ask-doubt" method="POST">
+      <textarea name="doubt" rows="4" placeholder="Type your doubt here..." required></textarea><br/>
+      <button type="submit">Ask</button>
+    </form>
+
+    <hr style="margin: 25px 0; border: 1px solid rgba(255, 255, 255, 0.3);" />
+
+    <% if (doubts.length === 0) { %>
+      <p>No doubts asked yet.</p>
+    <% } else { %>
+      <% doubts.forEach(doubt => { %>
+        <div class="doubt-item">
+          <p><strong>Q:</strong> <%= doubt.question %></p>
+          <p><strong>Status:</strong> <%= doubt.status %></p>
+          <% if (doubt.answer) { %>
+            <p><strong>A:</strong> <%= doubt.answer %></p>
+          <% } else { %>
+            <p><em>Pending response...</em></p>
+          <% } %>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <a href="/welcome" class="back-link">← Back to Dashboard</a>
+  </div>
+</body>
+</html>
