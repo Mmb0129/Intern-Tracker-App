@@ -1,37 +1,37 @@
 const { google } = require("googleapis"); 
-const fs = require("fs"); 
+// const fs = require("fs"); 
 const mime = require("mime-types");
 const COORDINATORS = require("../data/coordinators")
-const multer = require("multer");
+// const multer = require("multer");
 
 require("dotenv").config();
 
 
 
-// Ensure the "uploads" folder exists
-const uploadDir = "uploads";
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
-}
+// // Ensure the "uploads" folder exists
+// const uploadDir = "uploads";
+// if (!fs.existsSync(uploadDir)) {
+//     fs.mkdirSync(uploadDir);
+// }
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/'); // Make sure 'uploads/' directory exists
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, 'uploads/'); // Make sure 'uploads/' directory exists
+//     },
+//     filename: function (req, file, cb) {
+//         cb(null, Date.now() + '-' + file.originalname);
+//     }
+// });
 
-const upload = multer({
-    storage: storage
-}).fields([
-    { name: 'permissionLetter', maxCount: 1 },
-    { name: 'completionCertificate', maxCount: 1 },
-    { name: 'internshipReport', maxCount: 1 },
-    { name: 'studentFeedback', maxCount: 1 },
-    { name: 'employerFeedback', maxCount: 1 }
-]);
+// const upload = multer({
+//     storage: storage
+// }).fields([
+//     { name: 'permissionLetter', maxCount: 1 },
+//     { name: 'completionCertificate', maxCount: 1 },
+//     { name: 'internshipReport', maxCount: 1 },
+//     { name: 'studentFeedback', maxCount: 1 },
+//     { name: 'employerFeedback', maxCount: 1 }
+// ]);
 
 
 // Authenticate Google Drive API
@@ -198,13 +198,11 @@ async function updateGoogleSheetWithLinks(registerNumber, driveLinks) {
 
 
 module.exports = {
-    upload,
     createSubfolder,
     uploadToDrive,
     getLastSerialNumber,
     isCoordinator,
     updateGoogleSheetWithLinks,
-    uploadDir, // optional
 };
 
 

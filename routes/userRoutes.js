@@ -11,13 +11,11 @@ const Doubt = require("../models/Doubt");
 
 
 const {
-    upload,
     createSubfolder,
     uploadToDrive,
     getLastSerialNumber,
     isCoordinator,
     updateGoogleSheetWithLinks,
-    uploadDir, // optional; use only if needed
 } = require("../controllers/userController");
 
 
@@ -230,7 +228,7 @@ router.post("/login", async (req, res) => {
 
 
 
-router.post("/upload", upload, async (req, res) => {
+router.post("/upload",async (req, res) => {
     try {
         if (!req.files || !req.body.registerNumber) {
             return res.status(400).send("No files uploaded or missing Register Number.");
