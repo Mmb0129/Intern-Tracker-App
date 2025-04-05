@@ -12,14 +12,13 @@ app.use(express.json()); // Middleware to parse JSON
  
 // Set EJS as the template engine 
 app.set("view engine", "ejs"); 
- 
+app.set("views", path.join(__dirname, "views"));
 // Middleware to parse form data 
 app.use(express.urlencoded({ extended: true })); 
  
 // Serve static files (CSS) 
 app.use(express.static(path.join(__dirname, "public"))); 
  
-app.use(express.static("uploads")); // Serve uploaded files
 
 
 app.use(session({ 
