@@ -4,7 +4,7 @@ const path = require("path");
 const routes = require("./routes/userRoutes");
 require("dotenv").config();
 const mongoose = require("mongoose");
-
+const serverless = require('serverless-http');
 const app = express(); 
  
  
