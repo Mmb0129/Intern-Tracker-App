@@ -41,3 +41,13 @@ mongoose.connect(MONGO_URI)
 app.listen(PORT, () => { 
     console.log("Server running on PORT "+PORT); 
 }); 
+
+// Only start server if NOT in Vercel
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 3739;
+  app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));
+}
+
+// Export app for Vercel
+module.exports = app;
+module.exports.handler = serverless(app);
