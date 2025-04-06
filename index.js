@@ -6,7 +6,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const serverless = require('serverless-http');
 const app = express(); 
- 
+const MongoStore = require("connect-mongo");
  
 app.use(express.json()); // Middleware to parse JSON 
  
@@ -20,12 +20,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public"))); 
  
 
-
-app.use(session({ 
-    secret: "mysecretkey", 
-    resave: false, 
-    saveUninitialized: true, 
-})); 
+// Vercel deployment using MongoDB as the session store
+app.set("trust proxy", 1); // Trust Vercel's proxy
+app.use(session({
+  secret: "mySecretKey-you-fraud-intruder-cant-guess-man",
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI, 
+    collectionName: "sessions",
+  }),
+  cookie: {
+    maxAge: 1000 * 60 * 60, // 1 hour
+    sameSite: "lax",        // Important for Vercel
+    secure: true            // Required for HTTPS on Vercel
+  }
+}));
 
 app.use("/",routes);
  
