@@ -6,13 +6,13 @@
     <title>Student Internship Details Form</title>
     <link rel="stylesheet" href="/fill-form.css">
     <link rel="icon" type="image/png" href="/ssn-logo.png">
-
 </head>
 <body>
     <div class="container">
         <header>Student Internship Details Form</header>
         <form action="/upload" method="POST" enctype="multipart/form-data">
             <div class="fields">
+                <!-- Input Fields -->
                 <div class="input-group">
                     <label>Register Number</label>
                     <input type="text" name="registerNumber" placeholder="Enter Register Number" required>
@@ -83,32 +83,58 @@
                 </div>
             </div>
 
+            <!-- Document Upload Section -->
             <div class="document-section">
-                <label>Upload Documents</label>
+                <label><strong>Upload Documents</strong></label>
+
                 <div class="input-group">
-                    <label>Signed Permission Letter, Offer Letter</label>
-                    <input type="file" name="permissionLetter">
+                    <input type="checkbox" id="uploadPermission" onchange="toggleFileInput(this, 'permissionLetterInput')" />
+                    <label for="uploadPermission">I have the Signed Permission Letter / Offer Letter</label>
+                    <input type="file" id="permissionLetterInput" name="permissionLetter" style="display: none;" disabled>
                 </div>
+
                 <div class="input-group">
-                    <label>Completion Certificate</label>
-                    <input type="file" name="completionCertificate">
+                    <input type="checkbox" id="uploadCompletion" onchange="toggleFileInput(this, 'completionCertificateInput')" />
+                    <label for="uploadCompletion">I have the Completion Certificate</label>
+                    <input type="file" id="completionCertificateInput" name="completionCertificate" style="display: none;" disabled>
                 </div>
+
                 <div class="input-group">
-                    <label>Internship Report</label>
-                    <input type="file" name="internshipReport">
+                    <input type="checkbox" id="uploadReport" onchange="toggleFileInput(this, 'internshipReportInput')" />
+                    <label for="uploadReport">I have the Internship Report</label>
+                    <input type="file" id="internshipReportInput" name="internshipReport" style="display: none;" disabled>
                 </div>
+
                 <div class="input-group">
-                    <label>Student Feedback</label>
-                    <input type="file" name="studentFeedback">
+                    <input type="checkbox" id="uploadStudentFeedback" onchange="toggleFileInput(this, 'studentFeedbackInput')" />
+                    <label for="uploadStudentFeedback">I have the Student Feedback</label>
+                    <input type="file" id="studentFeedbackInput" name="studentFeedback" style="display: none;" disabled>
                 </div>
+
                 <div class="input-group">
-                    <label>Employer Feedback</label>
-                    <input type="file" name="employerFeedback">
+                    <input type="checkbox" id="uploadEmployerFeedback" onchange="toggleFileInput(this, 'employerFeedbackInput')" />
+                    <label for="uploadEmployerFeedback">I have the Employer Feedback</label>
+                    <input type="file" id="employerFeedbackInput" name="employerFeedback" style="display: none;" disabled>
                 </div>
             </div>
 
             <button type="submit">Submit</button>
         </form>
     </div>
+
+    <script>
+        function toggleFileInput(checkbox, inputId) {
+            const fileInput = document.getElementById(inputId);
+            if (!fileInput) return;
+
+            if (checkbox.checked) {
+                fileInput.style.display = "block";
+                fileInput.disabled = false;
+            } else {
+                fileInput.style.display = "none";
+                fileInput.disabled = true;
+            }
+        }
+    </script>
 </body>
 </html>

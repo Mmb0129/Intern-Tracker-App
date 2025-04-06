@@ -3,7 +3,7 @@ const { google } = require("googleapis");
 const mime = require("mime-types");
 const COORDINATORS = require("../data/coordinators")
 // const multer = require("multer");
-
+const { Readable } = require("stream");
 require("dotenv").config();
 
 
@@ -33,27 +33,33 @@ require("dotenv").config();
 //     { name: 'employerFeedback', maxCount: 1 }
 // ]);
 
-
-// Authenticate Google Drive API
 async function getDriveInstance() {
     const auth = new google.auth.GoogleAuth({
-        credentials: {
-          type: "service_account",
-          project_id: process.env.GOOGLE_PROJECT_ID,
-          private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
-          private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-          client_email: process.env.GOOGLE_CLIENT_EMAIL,
-          client_id: process.env.GOOGLE_CLIENT_ID,
-          auth_uri: "https://accounts.google.com/o/oauth2/auth",
-          token_uri: "https://oauth2.googleapis.com/token",
-          auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
-          client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
-          universe_domain: "googleapis.com"
-        },
-        scopes: ["https://www.googleapis.com/auth/spreadsheets"]
-      });
+      credentials: {
+        type: "service_account",
+        project_id: process.env.GOOGLE_PROJECT_ID,
+        private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
+        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        auth_uri: "https://accounts.google.com/o/oauth2/auth",
+        token_uri: "https://oauth2.googleapis.com/token",
+        auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+        client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
+        universe_domain: "googleapis.com"
+      },
+      scopes: [
+        "https://www.googleapis.com/auth/drive",
+        "https://www.googleapis.com/auth/spreadsheets"
+      ]
+    });
+  
     return google.drive({ version: "v3", auth });
-}
+  }
+  
+
+
+
 
 // Function to create a subfolder in Drive
 async function createSubfolder(subfolderName) {
@@ -77,16 +83,18 @@ async function createSubfolder(subfolderName) {
 
 
 
-// Function to upload files to Drive inside the subfolder
-async function uploadToDrive(filePath, fileName, subfolderId) {
+
+async function uploadToDrive(buffer, originalName, mimeType, subfolderId) {
     const drive = await getDriveInstance();
+
     const fileMetadata = {
-        name: fileName,
+        name: originalName,
         parents: [subfolderId],
     };
+
     const media = {
-        mimeType: mime.lookup(filePath) || "application/octet-stream",
-        body: fs.createReadStream(filePath),
+        mimeType: mimeType || mime.lookup(originalName) || "application/octet-stream",
+        body: Readable.from(buffer),
     };
 
     const file = await drive.files.create({
@@ -95,10 +103,9 @@ async function uploadToDrive(filePath, fileName, subfolderId) {
         fields: "id",
     });
 
-    console.log(`✅ Uploaded ${fileName} to Drive: ${file.data.id}`);
+    console.log(`✅ Uploaded ${originalName} to Drive: ${file.data.id}`);
     return file.data.id;
 }
-
 
 
 

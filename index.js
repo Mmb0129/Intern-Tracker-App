@@ -33,7 +33,7 @@ app.use(session({
   cookie: {
     maxAge: 1000 * 60 * 60, // 1 hour
     sameSite: "lax",        // Important for Vercel
-    secure: true            // Required for HTTPS on Vercel
+    secure: false          // Required for HTTPS on Vercel
   }
 }));
 
@@ -47,13 +47,10 @@ mongoose.connect(MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
   .catch(err => console.error("❌ Connection error:", err));
 
-app.listen(PORT, () => { 
-    console.log("Server running on PORT "+PORT); 
-}); 
+
 
 // Only start server if NOT in Vercel
 if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 3739;
   app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));
 }
 

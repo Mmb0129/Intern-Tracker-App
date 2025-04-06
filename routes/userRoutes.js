@@ -9,6 +9,9 @@ const COORDINATORS = require("../data/coordinators")
 const nodemailer = require("nodemailer");
 const Doubt = require("../models/Doubt");
 const path = require("path");
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
+
 
 const {
     createSubfolder,
@@ -195,7 +198,7 @@ router.post("/login", async (req, res) => {
                 const spreadsheetId = process.env.SPREADSHEET_ID;
                 const response = await googleSheets.spreadsheets.values.get({ 
                     spreadsheetId, 
-                    range: "Sheet1!A:T",
+                    range: "Sheet1!A:O",
                 });
 
                 const rows = response.data.values || [];
@@ -204,10 +207,25 @@ router.post("/login", async (req, res) => {
 
 
                 if (studentData) {
-                    return res.redirect("/welcome");
+                    const [
+                        sno, regNo, name, mobile, section, internshipStatus,
+                        title, period, startDate, endDate, companyName,
+                        placementSource, stipend, internshipType, location
+                    ] = studentData;
+                
+                    const requiredFields = [mobile, section, internshipStatus, title, period, startDate, endDate, companyName, placementSource, stipend, internshipType, location];
+                
+                    const isComplete = requiredFields.every(field => field && field.trim() !== "");
+                
+                    if (isComplete) {
+                        return res.redirect("/welcome"); // all fields filled
+                    } else {
+                        return res.redirect("/student"); // still needs to fill details
+                    }
                 } else {
-                    return res.redirect("/student");
+                    return res.redirect("/student"); // not found in sheet
                 }
+                
             } catch (error) {
                 console.error("Error checking student submission:", error.message);
                 return res.render("error", { title: "Error", message: "Login Failed" });
@@ -228,46 +246,148 @@ router.post("/login", async (req, res) => {
 
 
 
-
-router.post("/upload",async (req, res) => {
-    try {
-        if (!req.files || !req.body.registerNumber) {
-            return res.status(400).send("No files uploaded or missing Register Number.");
-        }
-
-        let registerNumber = req.body.registerNumber.trim().replace(/\s+/g, ""); // Remove spaces
-        let studentName = req.body.name.trim().replace(/[^a-zA-Z0-9-_ ]/g, ""); 
-
-        if (!studentName) {
-            studentName = `Upload_${Date.now()}`; // Fallback if name is empty
-        }
-
-        // Create a subfolder in Google Drive for the student
-        const subfolderId = await createSubfolder(studentName);
-
-        let driveLinks = {};
-
-        for (let field in req.files) {
-            const file = req.files[field][0]; // Get uploaded file
-            const driveFileId = await uploadToDrive(file.path, file.filename, subfolderId);
-            driveLinks[field] = `https://drive.google.com/file/d/${driveFileId}/view`;
-        }
-
-        // Update Google Sheets with the links
-        await updateGoogleSheetWithLinks(registerNumber, driveLinks);
-
-        res.json({
-            message: "Files uploaded successfully and updated in Google Sheets!",
-            subfolderId: subfolderId,
-            subfolderName: studentName,
-            driveLinks: driveLinks,
+router.post("/upload", upload.fields([
+            { name: "permissionLetter" },
+            { name: "completionCertificate" },
+            { name: "internshipReport" },
+            { name: "studentFeedback" },
+            { name: "employerFeedback" },
+        ]), async (req, res) => {
+            try {
+                if (!req.files || !req.body.registerNumber) {
+                    return res.status(400).send("No files uploaded or missing Register Number.");
+                }
+        
+                // Extract and trim student info
+                let {
+                    registerNumber, name, mobileNo, section, obtainedInternship, title,
+                    period, startDate, endDate, companyName, placementSource,
+                    stipend, internshipType, location
+                } = req.body;
+        
+                registerNumber = req.body.registerNumber.trim().replace(/\s+/g, "");
+                name = req.body.name?.trim().replace(/[^a-zA-Z0-9-_ ]/g, "") || `Upload_${Date.now()}`;
+        
+                // Step 1: Create Drive Folder
+                const folderName = `${registerNumber}_${name}`.replace(/[^a-zA-Z0-9-_]/g, "_");
+                const subfolderId = await createSubfolder(folderName);
+                if (!subfolderId) throw new Error("Failed to create Google Drive subfolder.");
+        
+                // Step 2: Upload files to Drive
+                const driveLinks = {};
+                for (let field in req.files) {
+                    const file = req.files[field][0];
+                    if (!file) continue;
+        
+                    const fileId = await uploadToDrive(
+                        file.buffer,
+                        file.originalname,
+                        file.mimetype,
+                        subfolderId
+                    );
+                    driveLinks[field] = `https://drive.google.com/file/d/${fileId}/view`;
+                }
+        
+                // Step 3: Google Sheets Setup
+                const auth = new google.auth.GoogleAuth({
+                    credentials: {
+                        type: "service_account",
+                        project_id: process.env.GOOGLE_PROJECT_ID,
+                        private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
+                        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+                        client_email: process.env.GOOGLE_CLIENT_EMAIL,
+                        client_id: process.env.GOOGLE_CLIENT_ID,
+                        auth_uri: "https://accounts.google.com/o/oauth2/auth",
+                        token_uri: "https://oauth2.googleapis.com/token",
+                        auth_provider_x509_cert_url: "https://www.googleapis.com/v1/certs",
+                        client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
+                    },
+                    scopes: ["https://www.googleapis.com/auth/spreadsheets"]
+                });
+        
+                const client = await auth.getClient();
+                const googleSheets = google.sheets({ version: "v4", auth: client });
+                const spreadsheetId = process.env.SPREADSHEET_ID;
+        
+                // Step 4: Check if student exists
+                const getRows = await googleSheets.spreadsheets.values.get({
+                    spreadsheetId,
+                    range: "Sheet1!A:Z"
+                });
+        
+                const rows = getRows.data.values;
+                let rowIndex = -1;
+        
+                for (let i = 1; i < rows.length; i++) {
+                    if (rows[i][1].trim().replace(/\s+/g, "") === registerNumber) {
+                        rowIndex = i + 1;
+                        break;
+                    }
+                }
+        
+                // Step 5: Prepare Data
+                const studentData = [
+                    registerNumber, name, mobileNo, section, obtainedInternship, title, period,
+                    startDate, endDate, companyName, placementSource, stipend, internshipType,
+                    location
+                ]; // B to O (14 columns)
+        
+                const fileLinksAndEmail = [
+                    driveLinks.permissionLetter || "",
+                    driveLinks.completionCertificate || "",
+                    driveLinks.internshipReport || "",
+                    driveLinks.studentFeedback || "",
+                    driveLinks.employerFeedback || "",
+                    req.session?.user?.email || ""
+                ]; // U to Z (6 columns)
+        
+                // Step 6: Update or Append
+                if (rowIndex !== -1) {
+                    // Update student fields (B to O)
+                    await googleSheets.spreadsheets.values.update({
+                        spreadsheetId,
+                        range: `Sheet1!B${rowIndex}:O${rowIndex}`,
+                        valueInputOption: "USER_ENTERED",
+                        resource: {
+                            values: [studentData]
+                        }
+                    });
+        
+                    // Update file links and email (U to Z)
+                    await googleSheets.spreadsheets.values.update({
+                        spreadsheetId,
+                        range: `Sheet1!U${rowIndex}:Z${rowIndex}`,
+                        valueInputOption: "USER_ENTERED",
+                        resource: {
+                            values: [fileLinksAndEmail]
+                        }
+                    });
+        
+                } else {
+                    // Append new row
+                    await googleSheets.spreadsheets.values.append({
+                        spreadsheetId,
+                        range: "Sheet1!A1",
+                        valueInputOption: "USER_ENTERED",
+                        resource: {
+                            values: [[rows.length, ...studentData, "", "", "", "", "", ...fileLinksAndEmail]]
+                            // Empty strings for P to T (Yes/No formulas will auto-fill)
+                        }
+                    });
+                }
+        
+                res.json({
+                    message: "Files and data uploaded successfully!",
+                    driveLinks,
+                    subfolderName: folderName
+                });
+        
+            } catch (error) {
+                console.error("Upload Error:", error.message);
+                res.status(500).json({ error: "Upload failed: " + error.message });
+            }
         });
-
-    } catch (error) {
-        console.error("Upload Error:", error.message);
-        res.status(500).send("Upload failed.");
-    }
-});
+        
 
 
 
@@ -467,7 +587,7 @@ router.get("/student", async (req, res) => {
         const spreadsheetId = process.env.SPREADSHEET_ID;
         const response = await googleSheets.spreadsheets.values.get({ 
             spreadsheetId, 
-            range: "Sheet1!A:Z",  // Adjust the range to include all columns
+            range: "Sheet1!A:O",  // Adjust the range to include all columns
         });
 
         const rows = response.data.values || [];
@@ -649,9 +769,8 @@ router.post("/update-details", async (req, res) => {
  
     try { 
         const { 
-            serialNo, registerNumber, name, mobileNo, section,intershipObtainedOrNot, title, period, startDate, endDate, 
-            companyName, placementSource, stipend, internshipType, location, permissionLetter, 
-            completionCertificate, internshipReport, studentFeedback, employerFeedback 
+            serialNo, registerNumber, name, mobileNo, section,internshipObtainedOrNot, title, period, startDate, endDate, 
+            companyName, placementSource, stipend, internshipType, location
         } = req.body; 
  
         const auth = new google.auth.GoogleAuth({
@@ -687,9 +806,7 @@ router.post("/update-details", async (req, res) => {
             resource: { 
                 values: [[ 
                     serialNo, registerNumber, name, mobileNo, section, internshipObtainedOrNot, title, period, 
-                    startDate, endDate, companyName, placementSource, stipend, internshipType, location, 
-                    permissionLetter, completionCertificate, internshipReport, 
-                    studentFeedback, employerFeedback 
+                    startDate, endDate, companyName, placementSource, stipend, internshipType, location
                 ]] 
             }, 
         }); 
