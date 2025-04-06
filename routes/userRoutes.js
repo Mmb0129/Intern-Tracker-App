@@ -385,7 +385,8 @@ router.get("/send-reminders", async (req, res) => {
     }
 });
 
-router.get("/view-details", async (req, res) => {  
+router.get("/view-details", async (req, res) => { 
+    console.log("Inside view-details route req.session.user:"+req.session.user);
     if (!req.session.user) return res.redirect("/"); 
 
     try { 
@@ -537,6 +538,8 @@ router.get("/dashboard", async (req, res) => {
 
  
 router.get("/update-details", async (req, res) => { 
+    console.log("Inside update-details route req.session.user:"+req.session.user);
+
     if (!req.session.user) return res.redirect("/"); 
  
     try { 
