@@ -535,60 +535,6 @@ router.get("/dashboard", async (req, res) => {
 }); 
 
 
-
- 
-router.get("/update-details", async (req, res) => { 
-    console.log("Inside update-details route req.session.user:"+req.session.user);
-
-    if (!req.session.user) return res.redirect("/"); 
- 
-    try { 
-        const auth = new google.auth.GoogleAuth({
-            credentials: {
-              type: "service_account",
-              project_id: process.env.GOOGLE_PROJECT_ID,
-              private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
-              private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-              client_email: process.env.GOOGLE_CLIENT_EMAIL,
-              client_id: process.env.GOOGLE_CLIENT_ID,
-              auth_uri: "https://accounts.google.com/o/oauth2/auth",
-              token_uri: "https://oauth2.googleapis.com/token",
-              auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
-              client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
-              universe_domain: "googleapis.com"
-            },
-            scopes: ["https://www.googleapis.com/auth/spreadsheets"]
-          }); 
- 
-        const client = await auth.getClient(); 
-        const googleSheets = google.sheets({ version: "v4", auth: client }); 
- 
-        const spreadsheetId = process.env.SPREADSHEET_ID; 
-        const response = await googleSheets.spreadsheets.values.get({ 
-            spreadsheetId, 
-            range: "Sheet1!A:T", 
-        }); 
- 
-        const rows = response.data.values || []; 
-        const userReg = req.session.user; 
- 
-        // Find the student's row using Register Number 
-        const studentData = rows.find(row => row[1].replace(/\s+/g, '') === 
-userReg.replace(/\s+/g, '')); 
- 
-        if (!studentData) { 
-            return res.render("error", {  
-                title: "No Records Found",  
-                message: "You have not submitted any internship details yet." 
-            }); 
-        } 
- 
-        res.render("update-details", { studentData }); 
-    } catch (error) { 
-        console.error("Error:", error.message); 
-        res.status(500).send("Error Fetching Data"); 
-    } 
-}); 
  
 router.post("/student", async (req, res) => { 
     if (!req.session.user) return res.redirect("/");
@@ -643,13 +589,67 @@ router.post("/student", async (req, res) => {
     } 
 });
 
+
+ 
+router.get("/update-details", async (req, res) => { 
+    console.log("Inside update-details route req.session.user:"+req.session.user);
+
+    if (!req.session.user) return res.redirect("/"); 
+ 
+    try { 
+        const auth = new google.auth.GoogleAuth({
+            credentials: {
+              type: "service_account",
+              project_id: process.env.GOOGLE_PROJECT_ID,
+              private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
+              private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+              client_email: process.env.GOOGLE_CLIENT_EMAIL,
+              client_id: process.env.GOOGLE_CLIENT_ID,
+              auth_uri: "https://accounts.google.com/o/oauth2/auth",
+              token_uri: "https://oauth2.googleapis.com/token",
+              auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+              client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
+              universe_domain: "googleapis.com"
+            },
+            scopes: ["https://www.googleapis.com/auth/spreadsheets"]
+          }); 
+ 
+        const client = await auth.getClient(); 
+        const googleSheets = google.sheets({ version: "v4", auth: client }); 
+ 
+        const spreadsheetId = process.env.SPREADSHEET_ID; 
+        const response = await googleSheets.spreadsheets.values.get({ 
+            spreadsheetId, 
+            range: "Sheet1!A:T", 
+        }); 
+ 
+        const rows = response.data.values || []; 
+        const userReg = req.session.user; 
+ 
+        // Find the student's row using Register Number 
+        const studentData = rows.find(row => row[1].replace(/\s+/g, '') === userReg.replace(/\s+/g, '')); 
+ 
+        if (!studentData) { 
+            return res.render("error", {  
+                title: "No Records Found",  
+                message: "You have not submitted any internship details yet." 
+            }); 
+        } 
+ 
+        res.render("update-details", { studentData }); 
+    } catch (error) { 
+        console.error("Error:", error.message); 
+        res.status(500).send("Error Fetching Data"); 
+    } 
+}); 
+
  
 router.post("/update-details", async (req, res) => { 
     if (!req.session.user) return res.redirect("/"); 
  
     try { 
         const { 
-            serialNo, registerNumber, name, mobileNo, section, title, period, startDate, endDate, 
+            serialNo, registerNumber, name, mobileNo, section,intershipObtainedOrNot, title, period, startDate, endDate, 
             companyName, placementSource, stipend, internshipType, location, permissionLetter, 
             completionCertificate, internshipReport, studentFeedback, employerFeedback 
         } = req.body; 
@@ -678,7 +678,7 @@ router.post("/update-details", async (req, res) => {
  
         // Find row number based on serial number 
         const spreadsheetId = process.env.SPREADSHEET_ID; 
-        const range = `Sheet1!A${serialNo}:T${serialNo}`; // Row to update 
+        const range = `Sheet1!A${serialNo+1}:T${serialNo+1}`; // Row to update 
  
         await googleSheets.spreadsheets.values.update({ 
             spreadsheetId, 
@@ -686,9 +686,8 @@ router.post("/update-details", async (req, res) => {
             valueInputOption: "USER_ENTERED", 
             resource: { 
                 values: [[ 
-                    serialNo, registerNumber, name, mobileNo, section, "Yes", title, period, 
-                    startDate, endDate, companyName, placementSource, stipend, internshipType, 
-location, 
+                    serialNo, registerNumber, name, mobileNo, section, internshipObtainedOrNot, title, period, 
+                    startDate, endDate, companyName, placementSource, stipend, internshipType, location, 
                     permissionLetter, completionCertificate, internshipReport, 
                     studentFeedback, employerFeedback 
                 ]] 
