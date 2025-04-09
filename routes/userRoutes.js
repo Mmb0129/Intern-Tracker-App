@@ -51,7 +51,7 @@ router.post("/student/ask-doubt", async (req, res) => {
 
 
 
-router.get("/generate-report", isCoordinator, async (req, res) => {
+router.get("/generate-report", async (req, res) => {
     try {
         const auth = new google.auth.GoogleAuth({
             credentials: {
