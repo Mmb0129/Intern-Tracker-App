@@ -60,6 +60,10 @@ h2 {
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+.edit{
+    pointer-events: none; opacity: 0.6; cursor: not-allowed
+}
+
 .btn:hover {
     background: rgba(255, 255, 255, 0.4);
     transform: scale(1.05);
