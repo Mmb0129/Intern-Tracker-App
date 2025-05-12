@@ -13,11 +13,13 @@
   "description": "",
   "dependencies": {
     "connect-mongo": "^5.1.0",
+    "connect-redis": "^8.0.3",
     "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "googleapis": "^144.0.0",
+    "ioredis": "^5.6.1",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.25",
     "mime-types": "^2.1.35",
