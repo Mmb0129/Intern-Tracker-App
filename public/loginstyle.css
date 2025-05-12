@@ -12,12 +12,14 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    margin: 0;
     background-color: #f7f7f7;
     background-image: url("https://www.ssn.edu.in/wp-content/uploads/2020/02/camp.png");
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;         /* Prevents cropping, fits image within view */
     background-position: center;
+    background-attachment: fixed;     /* Optional: keeps background still on scroll */
 }
 
 
