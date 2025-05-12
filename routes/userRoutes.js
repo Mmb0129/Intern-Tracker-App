@@ -279,9 +279,12 @@ router.post("/upload", upload.fields([
                     const file = req.files[field][0];
                     if (!file) continue;
         
+                    const extension = file.originalname.split('.').pop();
+                    const renamedFileName = `${field}.${extension}`;
+
                     const fileId = await uploadToDrive(
                         file.buffer,
-                        file.originalname,
+                        renamedFileName,
                         file.mimetype,
                         subfolderId
                     );
@@ -375,16 +378,14 @@ router.post("/upload", upload.fields([
                         }
                     });
                 }
-        
-                res.json({
-                    message: "Files and data uploaded successfully!",
-                    driveLinks,
-                    subfolderName: folderName
-                });
+                
+                req.session.msg = "Submitted successfully!";
+                res.redirect("/welcome");
         
             } catch (error) {
-                console.error("Upload Error:", error.message);
-                res.status(500).json({ error: "Upload failed: " + error.message });
+                req.session.error = "Upload failed: " + error.message;
+                res.redirect("/welcome");
+
             }
         });
         
@@ -394,7 +395,7 @@ router.post("/upload", upload.fields([
 router.get("/welcome", (req, res) => {
     const msg = req.session.msg;
     const error = req.session.error;
-
+    console.log(msg);
     // Clear it after reading, so it's a one-time message (like toastify)
     req.session.msg = null;
     req.session.error = null;
@@ -486,8 +487,8 @@ router.get("/send-reminders", async (req, res) => {
                     subject: "SSN Internship Cell: Missing Internship Documents",
                     html: `
                         <p>Dear ${row[nameIndex] || "Student"} (${row[regNoIndex] || "N/A"}),</p>
-                        <p>This is a reminder that the following internship documents are still <strong>pending</strong>:</p>
-                        <ul>${missing.map(item => `<li>${item}</li>`).join("")}</ul>
+                        <p>This is a reminder that the internship documents are still <strong>pending</strong>:</p>
+                        // <ul>${missing.map(item => `<li>${item}</li>`).join("")}</ul>
                         <p>Please upload them at your earliest convenience to avoid any issues.</p>
                         <p>Regards,<br>Internship Coordinator</p>
                     `
