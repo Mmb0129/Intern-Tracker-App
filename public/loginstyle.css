@@ -15,13 +15,13 @@ body {
     min-height: 100vh;
     margin: 0;
     background-color: #f7f7f7;
-    background-image: url("https://lms.ssn.edu.in/pluginfile.php/1/theme_boost/backgroundimage/1746527939/Vamasundari-Park.jpg");
-    background-repeat: no-repeat;
-    /* background-size: contain;         Prevents cropping, fits image within view */
-    background-position: center;
-    background-attachment: fixed;     /* Optional: keeps background still on scroll */
-}
 
+    background-image: url(image1.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
 
 .login-container {
     background: linear-gradient(135deg, #6a11cb, #2575fc);
