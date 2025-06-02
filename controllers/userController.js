@@ -117,7 +117,7 @@ async function getLastSerialNumber(auth, spreadsheetId) {
  
     const response = await googleSheets.spreadsheets.values.get({ 
         spreadsheetId, 
-        range: "Sheet1!A:A", // Fetch only the S.No column 
+        range: "ForInternTrackerAppDontFillHere!A:A", // Fetch only the S.No column 
     }); 
  
     const rows = response.data.values; 
@@ -195,7 +195,7 @@ async function updateGoogleSheetWithLinks(registerNumber, driveLinks) {
     // Update the respective row
     await googleSheets.spreadsheets.values.update({
         spreadsheetId: process.env.SPREADSHEET_ID,
-        range: `Sheet1!U${rowIndex}:Y${rowIndex}`, // Columns U to Y contain the links
+        range: `ForInternTrackerAppDontFillHere!U${rowIndex}:Y${rowIndex}`, // Columns U to Y contain the links
         valueInputOption: "USER_ENTERED",
         resource: { values: [updatedData] },
     });

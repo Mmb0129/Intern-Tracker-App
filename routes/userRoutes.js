@@ -76,7 +76,7 @@ router.get("/generate-report", async (req, res) => {
         const spreadsheetId = process.env.SPREADSHEET_ID;
         const response = await googleSheets.spreadsheets.values.get({
             spreadsheetId,
-            range: "Sheet1!A:T", 
+            range: "ForInternTrackerAppDontFillHere!A:T", 
         });
 
         const rows = response.data.values;
@@ -198,7 +198,7 @@ router.post("/login", async (req, res) => {
                 const spreadsheetId = process.env.SPREADSHEET_ID;
                 const response = await googleSheets.spreadsheets.values.get({ 
                     spreadsheetId, 
-                    range: "Sheet1!A:O",
+                    range: "ForInternTrackerAppDontFillHere!A:O",
                 });
 
                 const rows = response.data.values || [];
@@ -226,10 +226,12 @@ router.post("/login", async (req, res) => {
                     return res.redirect("/student"); // not found in sheet
                 }
                 
-            } catch (error) {
+            }catch (error) {
                 console.error("Error checking student submission:", error.message);
+                console.error("Full error:", error);
                 return res.render("error", { title: "Error", message: "Login Failed" });
             }
+
         } else { 
             return res.render("error", { 
                 title: "Login Failed!", 
@@ -269,7 +271,7 @@ router.post("/upload", upload.fields([
                 name = req.body.name?.trim().replace(/[^a-zA-Z0-9-_ ]/g, "") || `Upload_${Date.now()}`;
         
                 // Step 1: Create Drive Folder
-                const folderName = `${registerNumber}_${name}`.replace(/[^a-zA-Z0-9-_]/g, "_");
+                const folderName = `${registerNumber}-${name}`.replace(/[^a-zA-Z0-9-_]/g, "_");
                 const subfolderId = await createSubfolder(folderName);
                 if (!subfolderId) throw new Error("Failed to create Google Drive subfolder.");
         
@@ -315,7 +317,7 @@ router.post("/upload", upload.fields([
                 // Step 4: Check if student exists
                 const getRows = await googleSheets.spreadsheets.values.get({
                     spreadsheetId,
-                    range: "Sheet1!A:Z"
+                    range: "ForInternTrackerAppDontFillHere!A:Z"
                 });
         
                 const rows = getRows.data.values;
@@ -349,7 +351,7 @@ router.post("/upload", upload.fields([
                     // Update student fields (B to O)
                     await googleSheets.spreadsheets.values.update({
                         spreadsheetId,
-                        range: `Sheet1!B${rowIndex}:O${rowIndex}`,
+                        range: `ForInternTrackerAppDontFillHere!B${rowIndex}:O${rowIndex}`,
                         valueInputOption: "USER_ENTERED",
                         resource: {
                             values: [studentData]
@@ -359,7 +361,7 @@ router.post("/upload", upload.fields([
                     // Update file links and email (U to Z)
                     await googleSheets.spreadsheets.values.update({
                         spreadsheetId,
-                        range: `Sheet1!U${rowIndex}:Z${rowIndex}`,
+                        range: `ForInternTrackerAppDontFillHere!U${rowIndex}:Z${rowIndex}`,
                         valueInputOption: "USER_ENTERED",
                         resource: {
                             values: [fileLinksAndEmail]
@@ -370,7 +372,7 @@ router.post("/upload", upload.fields([
                     // Append new row
                     await googleSheets.spreadsheets.values.append({
                         spreadsheetId,
-                        range: "Sheet1!A1",
+                        range: "ForInternTrackerAppDontFillHere!A1",
                         valueInputOption: "USER_ENTERED",
                         resource: {
                             values: [[rows.length, ...studentData, "", "", "", "", "", ...fileLinksAndEmail]]
@@ -435,7 +437,7 @@ router.get("/send-reminders", async (req, res) => {
         const spreadsheetId = process.env.SPREADSHEET_ID;
         const response = await googleSheets.spreadsheets.values.get({
             spreadsheetId,
-            range: "Sheet1!A:Z"
+            range: "ForInternTrackerAppDontFillHere!A:Z"
         });
 
         const rows = response.data.values;
@@ -534,7 +536,7 @@ router.get("/view-details", async (req, res) => {
         const spreadsheetId = process.env.SPREADSHEET_ID;
         const response = await googleSheets.spreadsheets.values.get({ 
             spreadsheetId, 
-            range: "Sheet1!A:T", 
+            range: "ForInternTrackerAppDontFillHere!A:T", 
         }); 
 
         const rows = response.data.values || []; 
@@ -588,7 +590,7 @@ router.get("/student", async (req, res) => {
         const spreadsheetId = process.env.SPREADSHEET_ID;
         const response = await googleSheets.spreadsheets.values.get({ 
             spreadsheetId, 
-            range: "Sheet1!A:O",  // Adjust the range to include all columns
+            range: "ForInternTrackerAppDontFillHere!A:O",  // Adjust the range to include all columns
         });
 
         const rows = response.data.values || [];
@@ -644,7 +646,7 @@ router.get("/dashboard", async (req, res) => {
         const spreadsheetId = process.env.SPREADSHEET_ID;
         const response = await googleSheets.spreadsheets.values.get({ 
             spreadsheetId, 
-            range: "Sheet1!A:Y",  // Updated to include document links
+            range: "ForInternTrackerAppDontFillHere!A:Y",  // Updated to include document links
         }); 
  
         const rows = response.data.values || []; 
@@ -691,7 +693,7 @@ router.post("/student", async (req, res) => {
         // Append new student details
         await googleSheets.spreadsheets.values.append({ 
             spreadsheetId, 
-            range: "Sheet1!A:T", 
+            range: "ForInternTrackerAppDontFillHere!A:T", 
             valueInputOption: "USER_ENTERED", 
             resource: { 
                 values: [[ 
@@ -741,7 +743,7 @@ router.get("/update-details", async (req, res) => {
         const spreadsheetId = process.env.SPREADSHEET_ID; 
         const response = await googleSheets.spreadsheets.values.get({ 
             spreadsheetId, 
-            range: "Sheet1!A:T", 
+            range: "ForInternTrackerAppDontFillHere!A:T", 
         }); 
  
         const rows = response.data.values || []; 
@@ -798,7 +800,7 @@ router.post("/update-details", async (req, res) => {
  
         // Find row number based on serial number 
         const spreadsheetId = process.env.SPREADSHEET_ID; 
-        const range = `Sheet1!A${serialNo+1}:T${serialNo+1}`; // Row to update 
+        const range = `ForInternTrackerAppDontFillHere!A${serialNo+1}:T${serialNo+1}`; // Row to update 
  
         await googleSheets.spreadsheets.values.update({ 
             spreadsheetId, 
@@ -901,7 +903,7 @@ completionCertificate,
             auth, 
 
             spreadsheetId, 
-            range: "Sheet1!A:T", 
+            range: "ForInternTrackerAppDontFillHere!A:T", 
             valueInputOption: "USER_ENTERED", 
             resource: { 
                 values: [[ 
